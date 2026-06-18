@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -7,7 +8,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
@@ -133,7 +136,8 @@
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             padding: 40px 50px 40px 40px;
-            overflow: hidden; /* Prevent body scroll, let inner components handle sizing */
+            overflow: hidden;
+            /* Prevent body scroll, let inner components handle sizing */
             display: flex;
             flex-direction: column;
             opacity: 0;
@@ -180,7 +184,7 @@
             text-transform: uppercase;
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(4px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
         }
 
         .cover-title {
@@ -191,7 +195,7 @@
             line-height: 1.15;
             margin-bottom: 0.5rem;
         }
-        
+
         .cover-title .gold {
             background: linear-gradient(135deg, #b38f2d, #f5e08b, #b38f2d);
             -webkit-background-clip: text;
@@ -224,6 +228,7 @@
             margin: 0 auto;
             line-height: 1.8;
         }
+
         .cover-motto em {
             font-style: italic;
             color: #b38f2d;
@@ -239,8 +244,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.9; }
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 0.9;
+            }
         }
 
         /* ----------------------------------------------
@@ -290,7 +302,7 @@
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.45);
             border: 1px solid rgba(0, 48, 100, 0.06);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.01);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.01);
         }
 
         .tree-container svg {
@@ -305,22 +317,23 @@
         .node-group {
             cursor: grab;
         }
+
         .node-group:active {
             cursor: grabbing;
         }
-        
+
         .node-rect {
             stroke-width: 1.5px;
             rx: 6px;
             ry: 6px;
             transition: fill 0.25s, stroke 0.25s, filter 0.25s;
         }
-        
+
         .node-group:hover .node-rect {
             filter: drop-shadow(0 6px 15px rgba(0, 48, 100, 0.12));
             stroke-width: 2px;
         }
-        
+
         .node-text-name {
             fill: #001a38;
             font-size: 13px;
@@ -329,7 +342,7 @@
             text-anchor: middle;
             pointer-events: none;
         }
-        
+
         .node-text-year {
             fill: rgba(0, 48, 100, 0.6);
             font-size: 10px;
@@ -338,7 +351,7 @@
             text-anchor: middle;
             pointer-events: none;
         }
-        
+
         .node-text-label {
             fill: #b38f2d;
             font-size: 9px;
@@ -349,7 +362,7 @@
             text-anchor: middle;
             pointer-events: none;
         }
-        
+
         /* Smooth flow lines for elegant hierarchy representation */
         .link {
             fill: none;
@@ -357,6 +370,7 @@
             stroke-width: 1.75px;
             transition: stroke 0.25s, stroke-width 0.25s;
         }
+
         .link.highlighted {
             stroke: #b38f2d;
             stroke-width: 2.5px;
@@ -380,9 +394,11 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             z-index: 100;
         }
+
         .tooltip.visible {
             opacity: 1;
         }
+
         .tooltip strong {
             color: #f5e08b;
             font-size: 13px;
@@ -406,29 +422,37 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         .nav-area:hover {
             opacity: 1;
         }
-        .nav-area.prev { left: 50px; }
-        .nav-area.next { right: 0; }
-        
+
+        .nav-area.prev {
+            left: 50px;
+        }
+
+        .nav-area.next {
+            right: 0;
+        }
+
         .nav-hint {
             font-size: 3rem;
             color: rgba(0, 48, 100, 0.2);
             font-weight: 200;
-            background: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.4);
             width: 50px;
             height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transition: all 0.2s;
         }
+
         .nav-area:hover .nav-hint {
             color: #003064;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             transform: scale(1.05);
         }
 
@@ -447,6 +471,7 @@
             border: 1px solid rgba(0, 48, 100, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
+
         .dots .dot {
             width: 8px;
             height: 8px;
@@ -456,6 +481,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
+
         .dots .dot.active {
             background: #b38f2d;
             transform: scale(1.3);
@@ -465,31 +491,101 @@
            RESPONSIVE & MOBILE DESIGN
            ---------------------------------------------- */
         @media (max-width: 768px) {
-            .book::before { width: 36px; }
-            .book::after { left: 4px; width: 28px; background-size: 100% 2px !important; }
-            .spine-text { font-size: 0.65rem; left: 3px; width: 30px; letter-spacing: 0.2em; }
-            .pages { margin-left: 36px; width: calc(100% - 36px); }
-            .page { padding: 24px 24px 24px 20px; }
-            .page-header { margin-bottom: 10px; padding-bottom: 6px; }
-            .page-title { font-size: 1.2rem; }
-            .page-title small { font-size: 0.75rem; display: block; margin-left: 0; margin-top: 2px; }
-            .cover-title { font-size: 2.6rem; }
-            .cover-sub { font-size: 1rem; }
-            .nav-area { width: 15%; }
-            .nav-hint { width: 36px; height: 36px; font-size: 2rem; }
+            .book::before {
+                width: 36px;
+            }
+
+            .book::after {
+                left: 4px;
+                width: 28px;
+                background-size: 100% 2px !important;
+            }
+
+            .spine-text {
+                font-size: 0.65rem;
+                left: 3px;
+                width: 30px;
+                letter-spacing: 0.2em;
+            }
+
+            .pages {
+                margin-left: 36px;
+                width: calc(100% - 36px);
+            }
+
+            .page {
+                padding: 24px 24px 24px 20px;
+            }
+
+            .page-header {
+                margin-bottom: 10px;
+                padding-bottom: 6px;
+            }
+
+            .page-title {
+                font-size: 1.2rem;
+            }
+
+            .page-title small {
+                font-size: 0.75rem;
+                display: block;
+                margin-left: 0;
+                margin-top: 2px;
+            }
+
+            .cover-title {
+                font-size: 2.6rem;
+            }
+
+            .cover-sub {
+                font-size: 1rem;
+            }
+
+            .nav-area {
+                width: 15%;
+            }
+
+            .nav-hint {
+                width: 36px;
+                height: 36px;
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .book::before { width: 26px; }
-            .book::after { display: none; }
-            .spine-text { display: none; }
-            .pages { margin-left: 26px; width: calc(100% - 26px); }
-            .page { padding: 16px 16px 16px 12px; }
-            .cover-title { font-size: 2rem; }
-            .dots { bottom: 16px; padding: 0.4rem 0.8rem; }
+            .book::before {
+                width: 26px;
+            }
+
+            .book::after {
+                display: none;
+            }
+
+            .spine-text {
+                display: none;
+            }
+
+            .pages {
+                margin-left: 26px;
+                width: calc(100% - 26px);
+            }
+
+            .page {
+                padding: 16px 16px 16px 12px;
+            }
+
+            .cover-title {
+                font-size: 2rem;
+            }
+
+            .dots {
+                bottom: 16px;
+                padding: 0.4rem 0.8rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div class="book" id="book">
@@ -519,7 +615,8 @@
                     <h2 class="page-title">Legacy Chain I <small>Sheet 1</small></h2>
                 </div>
                 <div class="tree-container" id="tree1"></div>
-                <div class="page-footer" style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,48,100,0.05);display:flex;justify-content:space-between;font-size:0.7rem;color:rgba(0,48,100,0.3);flex-shrink:0;">
+                <div class="page-footer"
+                    style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,48,100,0.05);display:flex;justify-content:space-between;font-size:0.7rem;color:rgba(0,48,100,0.3);flex-shrink:0;">
                     <span>🖱 Drag to pan · Scroll to zoom</span>
                     <span id="count1">0 nodes</span>
                 </div>
@@ -532,7 +629,8 @@
                     <h2 class="page-title">Legacy Chain II <small>Sheet 2</small></h2>
                 </div>
                 <div class="tree-container" id="tree2"></div>
-                <div class="page-footer" style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,48,100,0.05);display:flex;justify-content:space-between;font-size:0.7rem;color:rgba(0,48,100,0.3);flex-shrink:0;">
+                <div class="page-footer"
+                    style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,48,100,0.05);display:flex;justify-content:space-between;font-size:0.7rem;color:rgba(0,48,100,0.3);flex-shrink:0;">
                     <span>🖱 Drag to pan · Scroll to zoom</span>
                     <span id="count2">0 nodes</span>
                 </div>
@@ -545,7 +643,8 @@
                     <h2 class="page-title">Legacy Chain III <small>Sheet 3</small></h2>
                 </div>
                 <div class="tree-container" id="tree3"></div>
-                <div class="page-footer" style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,48,100,0.05);display:flex;justify-content:space-between;font-size:0.7rem;color:rgba(0,48,100,0.3);flex-shrink:0;">
+                <div class="page-footer"
+                    style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,48,100,0.05);display:flex;justify-content:space-between;font-size:0.7rem;color:rgba(0,48,100,0.3);flex-shrink:0;">
                     <span>🖱 Drag to pan · Scroll to zoom</span>
                     <span id="count3">0 nodes</span>
                 </div>
@@ -570,17 +669,17 @@
     <script src="legacy_data.js"></script>
 
     <script>
-        (function() {
+        (function () {
             'use strict';
 
             // =============================================================
             // 1. CONFIG – Enhanced Dimensions for Visual Polish
             // =============================================================
-            const NODE_WIDTH = 150;         
-            const NODE_HEIGHT = 68;         
-            const HORIZONTAL_SPACING = 190; 
-            const VERTICAL_SPACING = 140;   
-            const PADDING = 0.12;           
+            const NODE_WIDTH = 150;
+            const NODE_HEIGHT = 68;
+            const HORIZONTAL_SPACING = 190;
+            const VERTICAL_SPACING = 140;
+            const PADDING = 0.12;
 
             // Color scheme matching Wah Yan College aesthetic identity
             const colors = {
@@ -593,10 +692,14 @@
             // =============================================================
             // 2. TREE LOGIC: Parses standard layout and maps dynamic links safely
             // =============================================================
+            // =============================================================
+            // 2. TREE LOGIC: Separates structured chains from isolated individuals
+            // =============================================================
             function buildForest(chains) {
                 const nodeMap = new Map();
                 const childSeen = new Set();
                 const relations = [];
+                const isolatedNodes = [];
 
                 function getOrCreate(name, year, label, type) {
                     if (!nodeMap.has(name)) {
@@ -610,7 +713,6 @@
                         });
                     } else {
                         const existing = nodeMap.get(name);
-                        // Elevate dynamic roles if explicitly flagged in sheets
                         if (existing.type === 'bridge' && type && type !== 'bridge') {
                             existing.type = type;
                         }
@@ -621,14 +723,28 @@
                 // Parse matrix chains safely
                 chains.forEach(chain => {
                     if (!chain || chain.length === 0) return;
-                    
+
+                    // 如果這條 Chain 長度只有 1，且被 Python 標註為 isolated，我們單獨收集
+                    if (chain.length === 1 && chain[0].type === 'isolated') {
+                        const n = chain[0];
+                        isolatedNodes.push({
+                            id: n.name,
+                            name: n.name,
+                            year: n.year || '',
+                            label: n.label || '',
+                            type: 'isolated',
+                            children: []
+                        });
+                        return; // 跳過，不進入 Tree 的結構
+                    }
+
                     for (let i = 0; i < chain.length - 1; i++) {
                         const pData = chain[i];
                         const cData = chain[i + 1];
-                        
+
                         getOrCreate(pData.name, pData.year, pData.label, pData.type);
                         getOrCreate(cData.name, cData.year, cData.label, cData.type);
-                        
+
                         relations.push({ parent: pData.name, child: cData.name });
                     }
                     if (chain.length === 1) {
@@ -640,7 +756,7 @@
                 relations.forEach(rel => {
                     const parentNode = nodeMap.get(rel.parent);
                     const childNode = nodeMap.get(rel.child);
-                    
+
                     if (!childSeen.has(rel.child) && parentNode && childNode) {
                         if (!parentNode.children.some(c => c.id === childNode.id)) {
                             parentNode.children.push(childNode);
@@ -650,13 +766,14 @@
                 });
 
                 const allNodes = Array.from(nodeMap.values());
+                // 這裡的 roots 只有真正有傳承鏈的樹根
                 const roots = allNodes.filter(n => !childSeen.has(n.id));
 
-                return { roots, nodeMap };
+                return { roots, nodeMap, isolatedNodes };
             }
 
             // =============================================================
-            // 3. RENDER ENGINE (Horizontal & Vertical adaptive layout alignment)
+            // 3. RENDER ENGINE (Hybrid Tree + Grid Layout)
             // =============================================================
             function renderTree(containerId, chains, countId) {
                 const container = document.getElementById(containerId);
@@ -664,28 +781,19 @@
 
                 const forest = buildForest(chains);
                 const roots = forest.roots;
+                const isolatedNodes = forest.isolatedNodes;
 
                 const countSpan = document.getElementById(countId);
                 if (countSpan) {
-                    const total = forest.nodeMap.size;
+                    const total = forest.nodeMap.size + isolatedNodes.length;
                     countSpan.textContent = total + ' individual' + (total !== 1 ? 's' : '');
                 }
 
                 container.innerHTML = '';
-                if (roots.length === 0) {
+                if (roots.length === 0 && isolatedNodes.length === 0) {
                     container.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;color:rgba(0,48,100,0.3);font-size:0.9rem;">No record available</div>';
                     return;
                 }
-
-                // Establish a clean unified virtual root structure
-                const dummy = { id: '___dummy___', name: 'Virtual Core', children: roots };
-                const hierarchy = d3.hierarchy(dummy, d => d.children);
-
-                const treeLayout = d3.tree()
-                    .nodeSize([HORIZONTAL_SPACING, VERTICAL_SPACING])
-                    .separation((a, b) => (a.parent === b.parent ? 1.1 : 1.4));
-
-                const treeData = treeLayout(hierarchy);
 
                 const rect = container.getBoundingClientRect();
                 const width = rect.width || 800;
@@ -697,17 +805,91 @@
                     .attr('width', width)
                     .attr('height', height);
 
-                // Defs layer for filters/gradients
-                const defs = svg.append('defs');
-
                 const g = svg.append('g').attr('class', 'zoom-group');
 
-                const realNodes = treeData.descendants().filter(d => d.data.id !== '___dummy___');
-                const realLinks = treeData.links().filter(l => l.source.data.id !== '___dummy___' && l.target.data.id !== '___dummy___');
+                // --- 🌟 A. 計算 樹狀結構 的坐標 ---
+                let maxTreeX = 0;
+                let maxTreeY = 0;
+                let minTreeX = 0;
+                let realNodes = [];
+                let realLinks = [];
 
-                // Dynamic Line Generator (Smooth Curves)
+                if (roots.length > 0) {
+                    const dummy = { id: '___dummy___', name: 'Virtual Core', children: roots };
+                    const hierarchy = d3.hierarchy(dummy, d => d.children);
+
+                    const treeLayout = d3.tree()
+                        .nodeSize([HORIZONTAL_SPACING, VERTICAL_SPACING])
+                        .separation((a, b) => (a.parent === b.parent ? 1.1 : 1.4));
+
+                    const treeData = treeLayout(hierarchy);
+
+                    realNodes = treeData.descendants().filter(d => d.data.id !== '___dummy___');
+                    realLinks = treeData.links().filter(l => l.source.data.id !== '___dummy___' && l.target.data.id !== '___dummy___');
+
+                    // 找出 Tree 佔據的邊界
+                    realNodes.forEach(d => {
+                        if (d.x < minTreeX) minTreeX = d.x;
+                        if (d.x > maxTreeX) maxTreeX = d.x;
+                        if (d.y > maxTreeY) maxTreeY = d.y;
+                    });
+                }
+
+                // --- 🌟 B. 計算 獨立 JASERs (Isolated Area) 的網格坐標 ---
+                // 我們把獨立區域安排在 Tree 的右側，留出一個寬度間距 (Gap)
+                const ISOLATED_START_X = roots.length > 0 ? maxTreeX + NODE_WIDTH * 2 : 0;
+                const ISOLATED_START_Y = roots.length > 0 ? -VERTICAL_SPACING / 2 : 0;
+                const GRID_COLUMNS = 3; // 獨立區域每行放 3 個人
+                const GRID_GAP_X = NODE_WIDTH + 40;
+                const GRID_GAP_Y = NODE_HEIGHT + 40;
+
+                const processedIsolatedNodes = isolatedNodes.map((node, i) => {
+                    const col = i % GRID_COLUMNS;
+                    const row = Math.floor(i / GRID_COLUMNS);
+                    return {
+                        x: ISOLATED_START_X + col * GRID_GAP_X,
+                        y: ISOLATED_START_Y + row * GRID_GAP_Y,
+                        data: node
+                    };
+                });
+
+                // 🌟 把「樹節點」與「獨立網格節點」合併，統一交給 D3 渲染
+                const allVisualNodes = [...realNodes, ...processedIsolatedNodes];
+
+                // --- 🌟 C. 畫 獨立區域 的背景裝飾框 (Visual Area Grouping) ---
+                if (processedIsolatedNodes.length > 0) {
+                    let minIsoX = d3.min(processedIsolatedNodes, d => d.x) - NODE_WIDTH / 2 - 20;
+                    let maxIsoX = d3.max(processedIsolatedNodes, d => d.x) + NODE_WIDTH / 2 + 20;
+                    let minIsoY = d3.min(processedIsolatedNodes, d => d.y) - NODE_HEIGHT / 2 - 40;
+                    let maxIsoY = d3.max(processedIsolatedNodes, d => d.y) + NODE_HEIGHT / 2 + 20;
+
+                    const isoGroupBounds = g.append('g').attr('class', 'isolated-boundary-group');
+
+                    // 畫一條淡淡的虛線分隔隔離區
+                    isoGroupBounds.append('rect')
+                        .attr('x', minIsoX)
+                        .attr('y', minIsoY)
+                        .attr('width', maxIsoX - minIsoX)
+                        .attr('height', maxIsoY - minIsoY)
+                        .attr('rx', 12)
+                        .style('fill', 'rgba(0, 48, 100, 0.015)')
+                        .style('stroke', 'rgba(179, 143, 45, 0.25)')
+                        .style('stroke-dasharray', '4,4')
+                        .style('pointer-events', 'none');
+
+                    // 隔離區的小標題
+                    isoGroupBounds.append('text')
+                        .attr('x', minIsoX + 15)
+                        .attr('y', minIsoY + 22)
+                        .style('fill', '#b38f2d')
+                        .style('font-size', '11px')
+                        .style('font-weight', '700')
+                        .style('letter-spacing', '0.08em')
+                        .text('STANDALONE JOURNEYS');
+                }
+
+                // --- 🌟 D. 渲染 連線 (Links) ---
                 const linkGen = d3.linkVertical().x(d => d.x).y(d => d.y);
-
                 const pathLinks = g.selectAll('.link')
                     .data(realLinks)
                     .enter()
@@ -715,15 +897,14 @@
                     .attr('class', 'link')
                     .attr('d', linkGen);
 
-                // Render structural element groupings
+                // --- 🌟 E. 渲染 所有節點 (Nodes) ---
                 const nodeGroups = g.selectAll('.node-group')
-                    .data(realNodes)
+                    .data(allVisualNodes)
                     .enter()
                     .append('g')
                     .attr('class', 'node-group')
                     .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
-                // Base node rectangles styling block
                 nodeGroups.append('rect')
                     .attr('class', 'node-rect')
                     .attr('width', NODE_WIDTH)
@@ -733,7 +914,6 @@
                     .style('fill', d => colors[d.data.type]?.fill || colors.bridge.fill)
                     .style('stroke', d => colors[d.data.type]?.stroke || colors.bridge.stroke);
 
-                // Text node alignments
                 nodeGroups.append('text')
                     .attr('class', 'node-text-name')
                     .attr('y', -10)
@@ -749,52 +929,52 @@
                     .attr('y', 22)
                     .text(d => d.data.label);
 
-                // Hover Interaction Highlights for Ancestral Chains
+                // --- 🌟 F. 互動與 Tooltip 邏輯 ---
                 const tooltip = d3.select('#tooltip');
-                nodeGroups.on('mouseenter', function(event, d) {
-                    // Highlight paths connected to current node
+                nodeGroups.on('mouseenter', function (event, d) {
                     pathLinks.classed('highlighted', l => l.target.data.id === d.data.id || l.source.data.id === d.data.id);
-                    
+
                     const roleLabel = d.data.type.toUpperCase();
                     const html = `<strong>${d.data.name}</strong>Identity: ${d.data.label || 'N/A'}<br/>Cohort: ${d.data.year || 'N/A'}<br/>Status: ${roleLabel}`;
-                    
+
                     tooltip.html(html)
                         .classed('visible', true)
                         .style('left', (event.clientX + 16) + 'px')
                         .style('top', (event.clientY - 12) + 'px');
                 })
-                .on('mousemove', function(event) {
-                    tooltip.style('left', (event.clientX + 16) + 'px')
-                        .style('top', (event.clientY - 12) + 'px');
-                })
-                .on('mouseleave', function() {
-                    pathLinks.classed('highlighted', false);
-                    tooltip.classed('visible', false);
-                });
+                    .on('mousemove', function (event) {
+                        tooltip.style('left', (event.clientX + 16) + 'px')
+                            .style('top', (event.clientY - 12) + 'px');
+                    })
+                    .on('mouseleave', function () {
+                        pathLinks.classed('highlighted', false);
+                        tooltip.classed('visible', false);
+                    });
 
-                // Zoom handling mechanics
+                // --- 🌟 G. 縮放與自動置中 (Auto-centering Framework) ---
                 const zoom = d3.zoom()
-                    .scaleExtent([0.1, 3])
+                    .scaleExtent([0.05, 3])
                     .on('zoom', event => g.attr('transform', event.transform));
 
                 svg.call(zoom);
 
-                // Auto-centering framework algorithms
-                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                realNodes.forEach(d => {
-                    if (d.x < minX) minX = d.x; if (d.x > maxX) maxX = d.x;
-                    if (d.y < minY) minY = d.y; if (d.y > maxY) maxY = d.y;
-                });
-                
-                minX -= NODE_WIDTH; maxX += NODE_WIDTH;
-                minY -= NODE_HEIGHT; maxY += NODE_HEIGHT;
+                // 計算包含「家族樹」與「獨立網格區」的全局邊界
+                let minX = d3.min(allVisualNodes, d => d.x) - NODE_WIDTH;
+                let maxX = d3.max(allVisualNodes, d => d.x) + NODE_WIDTH;
+                let minY = d3.min(allVisualNodes, d => d.y) - NODE_HEIGHT;
+                let maxY = d3.max(allVisualNodes, d => d.y) + NODE_HEIGHT;
 
-                const treeW = maxX - minX || 1;
-                const treeH = maxY - minY || 1;
+                // 如果有獨立專區背景框，也納入邊界防禦計算
+                if (processedIsolatedNodes.length > 0) {
+                    minY = Math.min(minY, d3.min(processedIsolatedNodes, d => d.y) - 80);
+                }
 
-                const scaleX = (width * (1 - 2 * PADDING)) / treeW;
-                const scaleY = (height * (1 - 2 * PADDING)) / treeH;
-                const scale = Math.min(scaleX, scaleY, 1.0); // Don't over-magnify small sets
+                const totalW = maxX - minX || 1;
+                const totalH = maxY - minY || 1;
+
+                const scaleX = (width * (1 - 2 * PADDING)) / totalW;
+                const scaleY = (height * (1 - 2 * PADDING)) / totalH;
+                const scale = Math.min(scaleX, scaleY, 1.0);
 
                 const tx = width / 2 - ((minX + maxX) / 2) * scale;
                 const ty = height / 2 - ((minY + maxY) / 2) * scale;
@@ -803,11 +983,10 @@
                 g.attr('transform', initTransform);
                 svg.call(zoom.transform, initTransform);
 
-                // Resize listener tracking responsive updates smoothly
                 const resizeObserver = new ResizeObserver(() => {
                     const nR = container.getBoundingClientRect();
                     svg.attr('viewBox', [0, 0, nR.width, nR.height])
-                       .attr('width', nR.width).attr('height', nR.height);
+                        .attr('width', nR.width).attr('height', nR.height);
                 });
                 resizeObserver.observe(container);
             }
@@ -826,12 +1005,12 @@
                 currentPage = index;
             }
 
-            document.getElementById('navNext').addEventListener('click', () => { if(currentPage < pages.length - 1) goToPage(currentPage + 1); });
-            document.getElementById('navPrev').addEventListener('click', () => { if(currentPage > 0) goToPage(currentPage - 1); });
+            document.getElementById('navNext').addEventListener('click', () => { if (currentPage < pages.length - 1) goToPage(currentPage + 1); });
+            document.getElementById('navPrev').addEventListener('click', () => { if (currentPage > 0) goToPage(currentPage - 1); });
 
             document.addEventListener('keydown', e => {
-                if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); if(currentPage < pages.length - 1) goToPage(currentPage + 1); }
-                else if (e.key === 'ArrowLeft') { e.preventDefault(); if(currentPage > 0) goToPage(currentPage - 1); }
+                if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); if (currentPage < pages.length - 1) goToPage(currentPage + 1); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); if (currentPage > 0) goToPage(currentPage - 1); }
             });
 
             // Touch support swipe behaviors
@@ -847,7 +1026,7 @@
             }, { passive: true });
 
             dots.forEach(dot => {
-                dot.addEventListener('click', function() {
+                dot.addEventListener('click', function () {
                     const idx = parseInt(this.getAttribute('data-index'), 10);
                     if (!isNaN(idx)) goToPage(idx);
                 });
@@ -871,9 +1050,10 @@
                 console.log('✅ JASERs Legacy Tree View Rendered.');
             }
 
-            if (document.readyState === 'complete' || document.readyState === 'interactive') { init(); } 
+            if (document.readyState === 'complete' || document.readyState === 'interactive') { init(); }
             else { document.addEventListener('DOMContentLoaded', init); }
         })();
     </script>
 </body>
+
 </html>
