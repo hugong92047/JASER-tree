@@ -1,1 +1,4 @@
 jaser_tree.xlsx
+.venv/
+__pycache__/
+
