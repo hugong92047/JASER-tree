@@ -1,0 +1,150 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  min-height: 100vh;
+}
+
+header {
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 28px 32px 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+header .subtitle {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-top: 6px;
+}
+
+#legend {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px 24px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.swatch-selected { background: #2563eb; }
+.swatch-ancestor { background: #16a34a; }
+.swatch-mentee { background: #d97706; }
+.swatch-dimmed { background: #cbd5e1; border: 1px solid #94a3b8; }
+
+#tree {
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+#lines-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.batch-group {
+  margin-bottom: 44px;
+}
+
+.batch-header {
+  font-size: 20px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.names-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.jaser-card {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+.jaser-card:hover {
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.jaser-card.clicked {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.jaser-card.ancestor {
+  background: #16a34a;
+  color: #fff;
+  border-color: #16a34a;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+}
+
+.jaser-card.mentee {
+  background: #d97706;
+  color: #fff;
+  border-color: #d97706;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+}
+
+.jaser-card.dimmed {
+  opacity: 0.2;
+}
+
+.jaser-card.dimmed:hover {
+  opacity: 0.35;
+  border-color: #94a3b8;
+  transform: none;
+  box-shadow: none;
+}
