@@ -1,19 +1,60 @@
+const TREES = {
+  'A': { label: 'Tree A', batchYears: ['25-26', '22-23', '19-20', '16-17'] },
+  'B': { label: 'Tree B', batchYears: ['24-25', '21-22', '18-19'] },
+  'C': { label: 'Tree C', batchYears: ['23-24', '20-21', '17-18'] },
+};
+
 let data = null;
 
 const state = {
   selectedId: null,
+  activeTree: 'A',
+  activeJasers: [],
 };
 
 async function init() {
   const resp = await fetch('data.json');
   data = await resp.json();
+  renderTabs();
+  filterByTree('A');
   renderTree();
   attachEvents();
 }
 
+function renderTabs() {
+  const container = document.getElementById('tabs');
+  container.innerHTML = '';
+  for (const [key, tree] of Object.entries(TREES)) {
+    const tab = document.createElement('button');
+    tab.className = 'tab' + (key === state.activeTree ? ' active' : '');
+    tab.dataset.tree = key;
+    tab.textContent = tree.label;
+    container.appendChild(tab);
+  }
+}
+
+function filterByTree(key) {
+  const tree = TREES[key];
+  state.activeJasers = data.jasers.filter(j =>
+    tree.batchYears.includes(j.batchYear)
+  );
+}
+
+function switchTree(key) {
+  if (state.activeTree === key) return;
+  state.activeTree = key;
+  clearSelection();
+  filterByTree(key);
+  renderTree();
+
+  document.querySelectorAll('.tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.tree === key)
+  );
+}
+
 function renderTree() {
   const tree = document.getElementById('tree');
-  const grouped = groupByBatch(data.jasers);
+  const grouped = groupByBatch(state.activeJasers);
 
   tree.innerHTML = '';
 
@@ -72,10 +113,17 @@ function attachEvents() {
     selectJaser(id);
   });
 
+  document.getElementById('tabs').addEventListener('click', (e) => {
+    const tab = e.target.closest('.tab');
+    if (!tab) return;
+    switchTree(tab.dataset.tree);
+  });
+
   document.addEventListener('click', (e) => {
     if (
       !e.target.closest('.jaser-card') &&
-      !e.target.closest('#legend')
+      !e.target.closest('#legend') &&
+      !e.target.closest('#tabs')
     ) {
       clearSelection();
     }
@@ -86,7 +134,7 @@ function attachEvents() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
       if (state.selectedId !== null) {
-        const jaser = data.jasers.find((j) => j.id === state.selectedId);
+        const jaser = state.activeJasers.find(j => j.id === state.selectedId);
         if (jaser) {
           const ancestors = getAncestors(jaser);
           const mentees = getDirectMentees(jaser);
@@ -105,7 +153,7 @@ function selectJaser(id) {
 
   state.selectedId = id;
 
-  const jaser = data.jasers.find((j) => j.id === id);
+  const jaser = state.activeJasers.find(j => j.id === id);
   if (!jaser) return;
 
   const ancestors = getAncestors(jaser);
@@ -134,7 +182,7 @@ function getAncestors(jaser) {
   const ancestors = [];
   let current = jaser;
   while (current.mentorId !== null) {
-    const mentor = data.jasers.find((j) => j.id === current.mentorId);
+    const mentor = state.activeJasers.find(j => j.id === current.mentorId);
     if (mentor) {
       ancestors.push(mentor);
       current = mentor;
@@ -146,12 +194,12 @@ function getAncestors(jaser) {
 }
 
 function getDirectMentees(jaser) {
-  return data.jasers.filter((j) => j.mentorId === jaser.id);
+  return state.activeJasers.filter(j => j.mentorId === jaser.id);
 }
 
 function updateHighlights(clickedId, ancestors, mentees) {
-  const ancestorIds = new Set(ancestors.map((a) => a.id));
-  const menteeIds = new Set(mentees.map((m) => m.id));
+  const ancestorIds = new Set(ancestors.map(a => a.id));
+  const menteeIds = new Set(mentees.map(m => m.id));
 
   document.querySelectorAll('.jaser-card').forEach((card) => {
     const id = parseInt(card.dataset.id);
@@ -214,7 +262,7 @@ function drawLines(clickedId, ancestors, mentees) {
   }
 
   const chainOrder = [...ancestors].reverse();
-  const clicked = data.jasers.find((j) => j.id === clickedId);
+  const clicked = state.activeJasers.find(j => j.id === clickedId);
   if (clicked) {
     chainOrder.push(clicked);
   }

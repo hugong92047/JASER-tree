@@ -30,6 +30,37 @@ header .subtitle {
   margin-top: 6px;
 }
 
+#tabs {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 24px 0;
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  padding: 10px 22px;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.tab:hover {
+  background: #cbd5e1;
+  color: #475569;
+}
+
+.tab.active {
+  background: #fff;
+  color: #1e293b;
+}
+
 #legend {
   max-width: 960px;
   margin: 0 auto;
