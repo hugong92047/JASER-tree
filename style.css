@@ -4,17 +4,26 @@
   padding: 0;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
+  display: flex;
+  flex-direction: column;
   font-family: system-ui, -apple-system, sans-serif;
   background: #f1f5f9;
   color: #1e293b;
-  min-height: 100vh;
+  overflow: hidden;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
 }
 
 header {
+  flex-shrink: 0;
   background: #1e293b;
   color: #f8fafc;
-  padding: 28px 32px 20px;
+  padding: 24px 32px 18px;
   text-align: center;
 }
 
@@ -31,11 +40,13 @@ header .subtitle {
 }
 
 #tabs {
+  flex-shrink: 0;
   max-width: 960px;
   margin: 0 auto;
-  padding: 20px 24px 0;
+  padding: 18px 24px 0;
   display: flex;
   gap: 4px;
+  justify-content: center;
 }
 
 .tab {
@@ -62,9 +73,10 @@ header .subtitle {
 }
 
 #legend {
+  flex-shrink: 0;
   max-width: 960px;
   margin: 0 auto;
-  padding: 12px 24px 0;
+  padding: 10px 24px 0;
   display: flex;
   flex-wrap: wrap;
   gap: 14px 20px;
@@ -91,19 +103,38 @@ header .subtitle {
 .swatch-mentee { background: #d97706; }
 .swatch-dimmed { background: #cbd5e1; border: 1px solid #94a3b8; }
 
-#tree {
-  position: relative;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 32px 24px;
+#tree-wrapper {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
-#lines-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  overflow: visible;
+#tree-container {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+}
+
+#tree-container::-webkit-scrollbar {
+  display: none;
+}
+
+#tree-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tree-panel {
+  flex: 0 0 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  padding: 28px 24px;
+  position: relative;
 }
 
 .batch-group {

@@ -9,16 +9,25 @@ let data = null;
 const state = {
   selectedId: null,
   activeTree: 'A',
-  activeJasers: [],
 };
 
 async function init() {
   const resp = await fetch('data.json');
   data = await resp.json();
   renderTabs();
-  filterByTree('A');
-  renderTree();
+  renderTrees();
+  setupScrollSync();
   attachEvents();
+}
+
+function formatBatchYear(short) {
+  const [s, e] = short.split('-');
+  return `20${s}-20${e} JASERs`;
+}
+
+function getTreeJasers(key) {
+  const tree = TREES[key];
+  return data.jasers.filter(j => tree.batchYears.includes(j.batchYear));
 }
 
 function renderTabs() {
@@ -33,64 +42,50 @@ function renderTabs() {
   }
 }
 
-function filterByTree(key) {
-  const tree = TREES[key];
-  state.activeJasers = data.jasers.filter(j =>
-    tree.batchYears.includes(j.batchYear)
-  );
-}
+function renderTrees() {
+  for (const [key, tree] of Object.entries(TREES)) {
+    const panel = document.querySelector(`.tree-panel[data-tree="${key}"]`);
+    if (!panel) continue;
 
-function switchTree(key) {
-  if (state.activeTree === key) return;
-  state.activeTree = key;
-  clearSelection();
-  filterByTree(key);
-  renderTree();
+    const treeJasers = getTreeJasers(key);
+    const grouped = groupByBatch(treeJasers);
 
-  document.querySelectorAll('.tab').forEach(t =>
-    t.classList.toggle('active', t.dataset.tree === key)
-  );
-}
+    panel.innerHTML = '';
 
-function renderTree() {
-  const tree = document.getElementById('tree');
-  const grouped = groupByBatch(state.activeJasers);
+    const sortedYears = Object.keys(grouped).sort((a, b) => {
+      const yearA = parseInt(a.split('-')[0]);
+      const yearB = parseInt(b.split('-')[0]);
+      return yearB - yearA;
+    });
 
-  tree.innerHTML = '';
+    for (const year of sortedYears) {
+      const section = document.createElement('section');
+      section.className = 'batch-group';
+      section.dataset.year = year;
 
-  const sortedYears = Object.keys(grouped).sort((a, b) => {
-    const yearA = parseInt(a.split('-')[0]);
-    const yearB = parseInt(b.split('-')[0]);
-    return yearB - yearA;
-  });
+      const header = document.createElement('h2');
+      header.className = 'batch-header';
+      header.textContent = formatBatchYear(year);
 
-  for (const year of sortedYears) {
-    const section = document.createElement('section');
-    section.className = 'batch-group';
-    section.dataset.year = year;
+      const grid = document.createElement('div');
+      grid.className = 'names-grid';
 
-    const header = document.createElement('h2');
-    header.className = 'batch-header';
-    header.textContent = year;
+      const sortedJasers = [...grouped[year]].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
 
-    const grid = document.createElement('div');
-    grid.className = 'names-grid';
+      for (const jaser of sortedJasers) {
+        const card = document.createElement('div');
+        card.className = 'jaser-card';
+        card.dataset.id = jaser.id;
+        card.textContent = jaser.name;
+        grid.appendChild(card);
+      }
 
-    const sortedJasers = [...grouped[year]].sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
-
-    for (const jaser of sortedJasers) {
-      const card = document.createElement('div');
-      card.className = 'jaser-card';
-      card.dataset.id = jaser.id;
-      card.textContent = jaser.name;
-      grid.appendChild(card);
+      section.appendChild(header);
+      section.appendChild(grid);
+      panel.appendChild(section);
     }
-
-    section.appendChild(header);
-    section.appendChild(grid);
-    tree.appendChild(section);
   }
 }
 
@@ -105,12 +100,28 @@ function groupByBatch(jasers) {
   return groups;
 }
 
+function setupScrollSync() {
+  const container = document.getElementById('tree-container');
+  container.addEventListener('scroll', () => {
+    if (container.clientWidth === 0) return;
+    const idx = Math.round(container.scrollLeft / container.clientWidth);
+    const keys = Object.keys(TREES);
+    const newKey = keys[idx];
+    if (newKey && newKey !== state.activeTree) {
+      state.activeTree = newKey;
+      clearSelection();
+      document.querySelectorAll('.tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.tree === newKey)
+      );
+    }
+  }, { passive: true });
+}
+
 function attachEvents() {
-  document.getElementById('tree').addEventListener('click', (e) => {
+  document.getElementById('tree-container').addEventListener('click', (e) => {
     const card = e.target.closest('.jaser-card');
     if (!card) return;
-    const id = parseInt(card.dataset.id);
-    selectJaser(id);
+    selectJaser(parseInt(card.dataset.id));
   });
 
   document.getElementById('tabs').addEventListener('click', (e) => {
@@ -134,10 +145,11 @@ function attachEvents() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
       if (state.selectedId !== null) {
-        const jaser = state.activeJasers.find(j => j.id === state.selectedId);
+        const activeJasers = getTreeJasers(state.activeTree);
+        const jaser = activeJasers.find(j => j.id === state.selectedId);
         if (jaser) {
-          const ancestors = getAncestors(jaser);
-          const mentees = getDirectMentees(jaser);
+          const ancestors = getAncestors(jaser, activeJasers);
+          const mentees = getDirectMentees(jaser, activeJasers);
           drawLines(state.selectedId, ancestors, mentees);
         }
       }
@@ -145,7 +157,45 @@ function attachEvents() {
   });
 }
 
+function switchTree(key) {
+  if (state.activeTree === key) return;
+
+  clearSelection();
+  state.activeTree = key;
+
+  const container = document.getElementById('tree-container');
+  const idx = Object.keys(TREES).indexOf(key);
+  container.scrollTo({
+    left: idx * container.clientWidth,
+    behavior: 'smooth'
+  });
+
+  document.querySelectorAll('.tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.tree === key)
+  );
+}
+
 function selectJaser(id) {
+  const card = document.querySelector(`.jaser-card[data-id="${id}"]`);
+  if (!card) return;
+
+  const panel = card.closest('.tree-panel');
+  const treeKey = panel.dataset.tree;
+
+  if (treeKey !== state.activeTree) {
+    clearSelection();
+    state.activeTree = treeKey;
+    const container = document.getElementById('tree-container');
+    const idx = Object.keys(TREES).indexOf(treeKey);
+    container.scrollTo({
+      left: idx * container.clientWidth,
+      behavior: 'smooth'
+    });
+    document.querySelectorAll('.tab').forEach(t =>
+      t.classList.toggle('active', t.dataset.tree === treeKey)
+    );
+  }
+
   if (state.selectedId === id) {
     clearSelection();
     return;
@@ -153,11 +203,12 @@ function selectJaser(id) {
 
   state.selectedId = id;
 
-  const jaser = state.activeJasers.find(j => j.id === id);
+  const treeJasers = getTreeJasers(treeKey);
+  const jaser = treeJasers.find(j => j.id === id);
   if (!jaser) return;
 
-  const ancestors = getAncestors(jaser);
-  const mentees = getDirectMentees(jaser);
+  const ancestors = getAncestors(jaser, treeJasers);
+  const mentees = getDirectMentees(jaser, treeJasers);
 
   updateHighlights(id, ancestors, mentees);
   drawLines(id, ancestors, mentees);
@@ -165,24 +216,23 @@ function selectJaser(id) {
 
 function clearSelection() {
   state.selectedId = null;
-  document.querySelectorAll('.jaser-card').forEach((card) => {
+  document.querySelectorAll('.jaser-card').forEach(card => {
     card.classList.remove('clicked', 'ancestor', 'mentee', 'dimmed');
   });
   clearSvg();
 }
 
 function clearSvg() {
-  const svg = document.getElementById('lines-svg');
-  if (svg) {
+  document.querySelectorAll('.lines-svg').forEach(svg => {
     svg.innerHTML = '';
-  }
+  });
 }
 
-function getAncestors(jaser) {
+function getAncestors(jaser, jaserList) {
   const ancestors = [];
   let current = jaser;
   while (current.mentorId !== null) {
-    const mentor = state.activeJasers.find(j => j.id === current.mentorId);
+    const mentor = jaserList.find(j => j.id === current.mentorId);
     if (mentor) {
       ancestors.push(mentor);
       current = mentor;
@@ -193,18 +243,23 @@ function getAncestors(jaser) {
   return ancestors;
 }
 
-function getDirectMentees(jaser) {
-  return state.activeJasers.filter(j => j.mentorId === jaser.id);
+function getDirectMentees(jaser, jaserList) {
+  return jaserList.filter(j => j.mentorId === jaser.id);
 }
 
 function updateHighlights(clickedId, ancestors, mentees) {
   const ancestorIds = new Set(ancestors.map(a => a.id));
   const menteeIds = new Set(mentees.map(m => m.id));
 
-  document.querySelectorAll('.jaser-card').forEach((card) => {
-    const id = parseInt(card.dataset.id);
+  document.querySelectorAll('.jaser-card').forEach(card => {
     card.classList.remove('clicked', 'ancestor', 'mentee', 'dimmed');
+  });
 
+  const panel = document.querySelector(`.tree-panel[data-tree="${state.activeTree}"]`);
+  if (!panel) return;
+
+  panel.querySelectorAll('.jaser-card').forEach(card => {
+    const id = parseInt(card.dataset.id);
     if (id === clickedId) {
       card.classList.add('clicked');
     } else if (ancestorIds.has(id)) {
@@ -218,33 +273,40 @@ function updateHighlights(clickedId, ancestors, mentees) {
 }
 
 function drawLines(clickedId, ancestors, mentees) {
-  const tree = document.getElementById('tree');
-  let svg = document.getElementById('lines-svg');
+  const panel = document.querySelector(`.tree-panel[data-tree="${state.activeTree}"]`);
+  if (!panel) return;
 
+  let svg = panel.querySelector('.lines-svg');
   if (!svg) {
     svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.id = 'lines-svg';
-    tree.insertBefore(svg, tree.firstChild);
+    svg.classList.add('lines-svg');
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    svg.style.pointerEvents = 'none';
+    svg.style.overflow = 'visible';
+    panel.style.position = 'relative';
+    panel.insertBefore(svg, panel.firstChild);
   }
 
   svg.innerHTML = '';
 
-  const width = tree.scrollWidth;
-  const height = tree.scrollHeight;
+  const width = panel.scrollWidth;
+  const height = panel.scrollHeight;
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
   svg.style.width = width + 'px';
   svg.style.height = height + 'px';
 
-  const treeRect = tree.getBoundingClientRect();
+  const panelRect = panel.getBoundingClientRect();
 
   function getCardCenter(id) {
-    const card = document.querySelector(`.jaser-card[data-id="${id}"]`);
+    const card = panel.querySelector(`.jaser-card[data-id="${id}"]`);
     if (!card) return null;
     const rect = card.getBoundingClientRect();
     return {
-      top: rect.top - treeRect.top,
-      bottom: rect.bottom - treeRect.top,
-      centerX: rect.left - treeRect.left + rect.width / 2,
+      top: rect.top - panelRect.top + panel.scrollTop,
+      bottom: rect.bottom - panelRect.top + panel.scrollTop,
+      centerX: rect.left - panelRect.left + rect.width / 2,
     };
   }
 
@@ -262,7 +324,8 @@ function drawLines(clickedId, ancestors, mentees) {
   }
 
   const chainOrder = [...ancestors].reverse();
-  const clicked = state.activeJasers.find(j => j.id === clickedId);
+  const activeJasers = getTreeJasers(state.activeTree);
+  const clicked = activeJasers.find(j => j.id === clickedId);
   if (clicked) {
     chainOrder.push(clicked);
   }
