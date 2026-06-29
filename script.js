@@ -1,16 +1,9 @@
-const TREES = {
-  'A': { batchYears: ['25-26', '22-23', '19-20', '16-17'] },
-  'B': { batchYears: ['24-25', '21-22', '18-19'] },
-  'C': { batchYears: ['23-24', '20-21', '17-18'] },
-};
-
 let data = null;
 
 const COLORS = {};
 
 const state = {
   selectedId: null,
-  selectedTree: null,
 };
 
 async function init() {
@@ -20,22 +13,8 @@ async function init() {
 
   const resp = await fetch('data.json');
   data = await resp.json();
-  buildJaserToTreeMap();
   renderList();
   attachEvents();
-}
-
-function buildJaserToTreeMap() {
-  const map = {};
-  for (const [key, tree] of Object.entries(TREES)) {
-    for (const year of tree.batchYears) {
-      const jasers = data.jasers.filter(j => j.batchYear === year);
-      for (const j of jasers) {
-        map[j.id] = key;
-      }
-    }
-  }
-  data.jasers.forEach(j => { j.tree = map[j.id] || null; });
 }
 
 function splitName(name) {
@@ -84,8 +63,6 @@ function renderList() {
       const card = document.createElement('div');
       card.className = 'jaser-card';
       card.dataset.id = jaser.id;
-      card.dataset.tree = jaser.tree || '';
-
       const { english, chinese } = splitName(jaser.name);
       const engSpan = document.createElement('span');
       engSpan.className = 'eng-name';
@@ -150,7 +127,6 @@ function selectJaser(id) {
   if (!jaser) return;
 
   state.selectedId = id;
-  state.selectedTree = jaser.tree;
 
   const ancestors = getAncestors(jaser);
   const descendants = getAllDescendants(jaser);
@@ -158,11 +134,13 @@ function selectJaser(id) {
   applySelectionVisibility();
   updateHighlights(id, ancestors, descendants);
   drawLines(id, ancestors, descendants);
+
+  const card = document.querySelector(`.jaser-card[data-id="${id}"]`);
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function clearSelection() {
   state.selectedId = null;
-  state.selectedTree = null;
 
   document.querySelectorAll('.jaser-card').forEach(card => {
     card.classList.remove('clicked', 'ancestor', 'mentee', 'dimmed', 'hidden');
@@ -182,7 +160,6 @@ function clearSvg() {
 }
 
 function applySelectionVisibility() {
-  const selectedTree = state.selectedTree;
   const jaser = data.jasers.find(j => j.id === state.selectedId);
   if (!jaser) return;
 
@@ -190,18 +167,18 @@ function applySelectionVisibility() {
   const descendants = getAllDescendants(jaser);
   const keepIds = new Set([jaser.id, ...ancestors.map(a => a.id), ...descendants.map(d => d.id)]);
 
+  const keepYears = new Set();
+  data.jasers.forEach(j => {
+    if (keepIds.has(j.id)) keepYears.add(j.batchYear);
+  });
+
   document.querySelectorAll('.jaser-card').forEach(card => {
-    const id = parseInt(card.dataset.id);
-    const cardTree = card.dataset.tree;
-    const inSelectedTree = cardTree === selectedTree;
-    const isChain = keepIds.has(id);
-    const visible = inSelectedTree || isChain;
-    card.classList.toggle('hidden', !visible);
+    card.classList.remove('hidden');
   });
 
   document.querySelectorAll('.batch-group').forEach(group => {
-    const visibleCards = group.querySelectorAll('.jaser-card:not(.hidden)');
-    group.classList.toggle('hidden', visibleCards.length === 0);
+    const year = group.dataset.year;
+    group.classList.toggle('hidden', !keepYears.has(year));
   });
 }
 
